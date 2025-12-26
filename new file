@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kedai Makan Saya</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #fff5e6;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 { color: #e65100; }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      background: #ff7a00;
+      color: white;
+      padding: 15px 25px;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍛 Kedai Makan Saya</h1>
+  <p>Tempah makanan terus melalui WhatsApp</p>
+  <a href="https://wa.me/60123456789">Order Sekarang</a>
+</body>
+</html>
