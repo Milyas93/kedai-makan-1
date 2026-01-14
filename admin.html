@@ -2,75 +2,97 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panel Admin - Warung Rasa Padu</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6 font-sans">
+<body class="bg-gray-100 text-gray-800">
 
-  <h1 class="text-2xl font-bold mb-4">📊 PANEL ADMIN</h1>
+<!-- HEADER -->
+<header class="bg-white shadow p-6">
+  <h1 class="text-2xl font-bold flex items-center gap-2">
+    📊 PANEL ADMIN
+  </h1>
+</header>
 
-  <div class="bg-white rounded-xl shadow p-4 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div>
-      <div class="text-gray-500 text-sm">Tarikh</div>
-      <div id="tarikh" class="font-bold text-lg">-</div>
+<!-- SUMMARY -->
+<section class="max-w-6xl mx-auto mt-6 px-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-white rounded-xl p-4 shadow">
+      <p class="text-gray-500 text-sm">Tarikh</p>
+      <p id="tarikh" class="text-xl font-bold">-</p>
     </div>
-    <div>
-      <div class="text-gray-500 text-sm">Jumlah Order</div>
-      <div id="jumlahOrder" class="font-bold text-lg">-</div>
+    <div class="bg-white rounded-xl p-4 shadow">
+      <p class="text-gray-500 text-sm">Jumlah Order</p>
+      <p id="jumlahOrder" class="text-xl font-bold">-</p>
     </div>
-    <div>
-      <div class="text-gray-500 text-sm">Jumlah Jualan (RM)</div>
-      <div id="jumlahJualan" class="font-bold text-lg">-</div>
+    <div class="bg-white rounded-xl p-4 shadow">
+      <p class="text-gray-500 text-sm">Jumlah Jualan (RM)</p>
+      <p id="jumlahJualan" class="text-xl font-bold">-</p>
     </div>
   </div>
+</section>
 
-  <h2 class="text-xl font-bold mb-2">🧾 Senarai Order Hari Ini</h2>
+<!-- TABLE -->
+<section class="max-w-6xl mx-auto mt-8 px-4">
+  <h2 class="text-lg font-bold mb-3">📋 Senarai Order Hari Ini</h2>
 
   <div class="bg-white rounded-xl shadow overflow-x-auto">
-    <table class="min-w-full text-sm">
-      <thead class="bg-gray-200">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-200 text-left">
         <tr>
-          <th class="p-2 text-left">Masa</th>
-          <th class="p-2 text-left">Nama</th>
-          <th class="p-2 text-left">Item</th>
-          <th class="p-2 text-center">Qty</th>
-          <th class="p-2 text-right">Harga</th>
-          <th class="p-2 text-right">Jumlah</th>
+          <th class="p-3">Masa</th>
+          <th class="p-3">Nama</th>
+          <th class="p-3">Item</th>
+          <th class="p-3">Qty</th>
+          <th class="p-3">Harga</th>
+          <th class="p-3">Jumlah</th>
         </tr>
       </thead>
-      <tbody id="orderList"></tbody>
+      <tbody id="orderTable"></tbody>
     </table>
   </div>
+</section>
 
+<!-- SCRIPT -->
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec";
 
 fetch(API_URL)
   .then(res => res.json())
   .then(data => {
-    document.getElementById("tarikh").textContent = data.tarikh;
-    document.getElementById("jumlahOrder").textContent = data.jumlahOrder;
-    document.getElementById("jumlahJualan").textContent = data.jumlahJualan.toFixed(2);
 
-    const tbody = document.getElementById("orderList");
+    // Summary
+    document.getElementById("tarikh").innerText = data.tarikh;
+    document.getElementById("jumlahOrder").innerText = data.jumlahOrder;
+    document.getElementById("jumlahJualan").innerText = Number(data.jumlahJualan).toFixed(2);
+
+    const tbody = document.getElementById("orderTable");
     tbody.innerHTML = "";
 
-    data.orders.forEach(o => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="p-2">${o.time}</td>
-        <td class="p-2">${o.name}</td>
-        <td class="p-2">${o.item}</td>
-        <td class="p-2 text-center">${o.qty}</td>
-        <td class="p-2 text-right">${o.price}</td>
-        <td class="p-2 text-right">${o.total}</td>
-      `;
-      tbody.appendChild(tr);
+    // Loop ORDER → LOOP ITEM
+    data.orders.forEach(order => {
+      order.items.forEach(item => {
+        const row = `
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-3">${order.time}</td>
+            <td class="p-3">${order.name}</td>
+            <td class="p-3">${item.item}</td>
+            <td class="p-3">${item.qty}</td>
+            <td class="p-3">RM ${item.price}</td>
+            <td class="p-3 font-bold">RM ${item.total}</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
     });
+
   })
   .catch(err => {
+    console.error("Admin fetch error:", err);
     alert("Gagal load data admin");
-    console.error(err);
   });
 </script>
 
