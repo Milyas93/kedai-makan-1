@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel Admin - Warung Rasa Padu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 font-sans">
 
+  <h1 class="text-2xl font-bold mb-4">📊 PANEL ADMIN</h1>
+
+  <div class="bg-white rounded-xl shadow p-4 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div>
+      <div class="text-gray-500 text-sm">Tarikh</div>
+      <div id="tarikh" class="font-bold text-lg">-</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-sm">Jumlah Order</div>
+      <div id="jumlahOrder" class="font-bold text-lg">-</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-sm">Jumlah Jualan (RM)</div>
+      <div id="jumlahJualan" class="font-bold text-lg">-</div>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-bold mb-2">🧾 Senarai Order Hari Ini</h2>
+
+  <div class="bg-white rounded-xl shadow overflow-x-auto">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2 text-left">Masa</th>
+          <th class="p-2 text-left">Nama</th>
+          <th class="p-2 text-left">Item</th>
+          <th class="p-2 text-center">Qty</th>
+          <th class="p-2 text-right">Harga</th>
+          <th class="p-2 text-right">Jumlah</th>
+        </tr>
+      </thead>
+      <tbody id="orderList"></tbody>
+    </table>
+  </div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec";
+
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("tarikh").textContent = data.tarikh;
+    document.getElementById("jumlahOrder").textContent = data.jumlahOrder;
+    document.getElementById("jumlahJualan").textContent = data.jumlahJualan.toFixed(2);
+
+    const tbody = document.getElementById("orderList");
+    tbody.innerHTML = "";
+
+    data.orders.forEach(o => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="p-2">${o.time}</td>
+        <td class="p-2">${o.name}</td>
+        <td class="p-2">${o.item}</td>
+        <td class="p-2 text-center">${o.qty}</td>
+        <td class="p-2 text-right">${o.price}</td>
+        <td class="p-2 text-right">${o.total}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(err => {
+    alert("Gagal load data admin");
+    console.error(err);
+  });
+</script>
+
+</body>
+</html>
