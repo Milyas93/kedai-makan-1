@@ -360,3 +360,23 @@
     </script>
 </body>
 </html>
+
+// ===== HANTAR KE GOOGLE SHEET =====
+fetch("https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec", {
+    method: "POST",
+    body: JSON.stringify({
+        nama: name,
+        items: cart.map(i => ({
+            name: i.name,
+            qty: i.qty,
+            price: i.price
+        }))
+    })
+})
+.then(res => res.text())
+.then(data => {
+    console.log("Order saved to Google Sheet:", data);
+})
+.catch(err => {
+    console.error("Google Sheet error:", err);
+});
