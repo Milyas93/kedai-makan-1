@@ -332,53 +332,58 @@
             updateUI();
         }
 
-        function sendOrder() {
-            const name = document.getElementById('cust-name').value.trim();
-            if (!name) return alert("Sila masukkan nama anda sebelum menghantar pesanan!");
+        <script>
+function sendOrder() {
+    const name = document.getElementById('cust-name').value.trim();
+    if (!name) {
+        alert("Sila masukkan nama anda sebelum menghantar pesanan!");
+        return;
+    }
 
-            // ===== HANTAR KE GOOGLE SHEET =====
-fetch("https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec", {
-    method: "POST",
-    body: JSON.stringify({
-        nama: name,
-        items: cart.map(i => ({
-            name: i.name,
-            qty: i.qty,
-            price: i.price
-        }))
+    const whatsappNo = "60168286324";
+
+    let msg = `*PESANAN BARU (WARUNG RASA PADU)*\n`;
+    msg += `--------------------------------\n`;
+    msg += `👤 *Pelanggan:* ${name}\n`;
+    msg += `📅 *Tarikh:* ${new Date().toLocaleDateString('ms-MY')}\n`;
+    msg += `--------------------------------\n\n`;
+
+    cart.forEach((i, index) => {
+        msg += `*${index + 1}. ${i.name}*\n`;
+        msg += `   RM${i.price.toFixed(2)} x ${i.qty} = *RM${(i.price * i.qty).toFixed(2)}*\n\n`;
+    });
+
+    msg += `--------------------------------\n`;
+    msg += `💰 *JUMLAH BAYARAN: ${document.getElementById('grand-total').textContent}*\n`;
+    msg += `--------------------------------\n\n`;
+    msg += `_Pesanan dihantar melalui laman web kedai._`;
+
+    const finalUrl = `https://wa.me/${whatsappNo}?text=${encodeURIComponent(msg)}`;
+
+    // ✅ 1️⃣ SIMPAN KE GOOGLE SHEET DAHULU
+    fetch("https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec", {
+        method: "POST",
+        body: JSON.stringify({
+            nama: name,
+            items: cart.map(i => ({
+                name: i.name,
+                qty: i.qty,
+                price: i.price
+            }))
+        })
     })
-})
-.then(res => res.text())
-.then(data => {
-    console.log("Order saved to Google Sheet:", data);
-})
-.catch(err => {
-    console.error("Google Sheet error:", err);
-});
+    .then(() => {
+        console.log("Order saved to Google Sheet");
 
-            const whatsappNo = "60168286324"; // Nombor yang dikemaskini
-            
-            let msg = `*PESANAN BARU (WARUNG RASA PADU)*\n`;
-            msg += `--------------------------------\n`;
-            msg += `👤 *Pelanggan:* ${name}\n`;
-            msg += `📅 *Tarikh:* ${new Date().toLocaleDateString('ms-MY')}\n`;
-            msg += `--------------------------------\n\n`;
-            
-            cart.forEach((i, index) => {
-                msg += `*${index + 1}. ${i.name}*\n`;
-                msg += `   RM${i.price.toFixed(2)} x ${i.qty} = *RM${(i.price * i.qty).toFixed(2)}*\n\n`;
-            });
-            
-            msg += `--------------------------------\n`;
-            msg += `💰 *JUMLAH BAYARAN: ${document.getElementById('grand-total').textContent}*\n`;
-            msg += `--------------------------------\n\n`;
-            msg += `_Pesanan dihantar melalui laman web kedai. Sila sahkan pesanan saya._`;
-            
-            const finalUrl = `https://wa.me/${whatsappNo}?text=${encodeURIComponent(msg)}`;
-            window.open(finalUrl, '_blank');
-        }
-    </script>
-</body>
-</html>
+        // ✅ 2️⃣ BARU BUKA WHATSAPP
+        window.open(finalUrl, "_blank");
+    })
+    .catch(err => {
+        console.error("Google Sheet error:", err);
+        alert("Order gagal disimpan. Sila cuba semula.");
+    });
+}
+</script>
+
 
 
