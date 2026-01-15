@@ -49,6 +49,45 @@
         <p class="text-gray-200">Pilih menu, tambah ke troli dan pesan melalui WhatsApp</p>
     </div>
 </header>
+<script>
+const menuData = [
+/* ================= MAKANAN ================= */
+{id:1,cat:'makanan',name:'Nasi Lemak Ayam Berempah',price:12,img:'https://i.postimg.cc/MpSkrQjS/image.png',desc:'Ayam goreng rempah rangup'},
+{id:2,cat:'makanan',name:'Nasi Goreng Kampung',price:9.5,img:'https://i.postimg.cc/fL0BN8Gs/image.png',desc:'Ikan bilis & kangkung'},
+{id:3,cat:'makanan',name:'Char Kuey Teow Special',price:10,img:'https://i.postimg.cc/cJTN3LCq/image.png',desc:'Udang & telur itik'},
+{id:4,cat:'makanan',name:'Burger Daging Cheese',price:14.5,img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',desc:'Patty tebal & cheese cair'},
+{id:5,cat:'makanan',name:'Mee Goreng Mamak',price:8,img:'https://images.unsplash.com/photo-1552611052-33e04de081de?w=400',desc:'Gorengan mamak panas'},
+{id:6,cat:'makanan',name:'Ayam Goreng Crispy (2pcs)',price:9,img:'https://i.postimg.cc/htnvfZZY/image.png',desc:'Rangup & juicy'},
+{id:7,cat:'makanan',name:'Satay Ayam (10 Cucuk)',price:15,img:'https://i.postimg.cc/jSRqswCf/image.png',desc:'Kuah kacang padu'},
+{id:8,cat:'makanan',name:'Sate Daging (10 Cucuk)',price:18,img:'https://i.postimg.cc/brLCkBHt/image.png',desc:'Daging lembu premium'},
+{id:9,cat:'makanan',name:'Nasi Kerabu Ayam Bakar',price:15,img:'https://i.postimg.cc/Cx9vGDDH/image.png',desc:'Nasi biru & ulam'},
+{id:10,cat:'makanan',name:'Laksa Utara',price:8.5,img:'https://i.postimg.cc/yd10cYfG/image.png',desc:'Kuah ikan pekat'},
+{id:11,cat:'makanan',name:'Nasi Ayam Penyet',price:13,img:'https://i.postimg.cc/sXgZ1HX7/image.png',desc:'Sambal terasi pedas'},
+{id:12,cat:'makanan',name:'Mee Bandung Muar',price:11,img:'https://i.postimg.cc/hPZgqyWg/image.png',desc:'Kuah udang pekat'},
+{id:13,cat:'makanan',name:'Soto Ayam',price:7.5,img:'https://i.postimg.cc/MGWhM18b/image.png',desc:'Sup berempah'},
+{id:14,cat:'makanan',name:'Mee Kari Kapal',price:9.5,img:'https://i.postimg.cc/QMzG2VRc/image.png',desc:'Kari santan kaw'},
+{id:15,cat:'makanan',name:'Roti John Cheese',price:10,img:'https://i.postimg.cc/N0sjsyJ3/image.png',desc:'Inti daging & sos'},
+
+/* ================= MINUMAN ================= */
+{id:21,cat:'minuman',name:'Teh Ais Padu',price:4.5,img:'https://i.postimg.cc/5977pZW7/image.png',desc:'Teh susu kaw'},
+{id:22,cat:'minuman',name:'Milo Ais Dinosaur',price:6.5,img:'https://i.postimg.cc/QtqPXtPC/image.png',desc:'Serbuk milo melimpah'},
+{id:23,cat:'minuman',name:'Sirap Bandung',price:5.5,img:'https://i.postimg.cc/C5SgN9yR/image.png',desc:'Sirap & susu'},
+{id:24,cat:'minuman',name:'Kopi O Ais',price:3.5,img:'https://i.postimg.cc/NjhxztJb/image.png',desc:'Kopi kampung'},
+{id:25,cat:'minuman',name:'Teh O Limau Ais',price:3.5,img:'https://i.postimg.cc/xjhhycmR/image.png',desc:'Segar & masam'},
+{id:26,cat:'minuman',name:'Barli Ais',price:4,img:'https://i.postimg.cc/pVh1TRSf/image.png',desc:'Barli home-made'},
+{id:27,cat:'minuman',name:'Nescafe Ais',price:4.5,img:'https://i.postimg.cc/0yBwbRFN/image.png',desc:'Berkrim'},
+{id:28,cat:'minuman',name:'Air Kelapa Muda',price:6,img:'https://i.postimg.cc/d3Ydw2X4/image.png',desc:'Kelapa segar'},
+{id:29,cat:'minuman',name:'Jus Tembikai',price:5,img:'https://i.postimg.cc/PrDWZcXZ/image.png',desc:'Buah segar'},
+{id:30,cat:'minuman',name:'Ribena Longan',price:6,img:'https://i.postimg.cc/43pxZDg4/image.png',desc:'Manis & sejuk'},
+
+/* ================= PENCUCI MULUT ================= */
+{id:31,cat:'pencuci-mulut',name:'Cendol Durian',price:12,img:'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400',desc:'Durian asli'},
+{id:32,cat:'pencuci-mulut',name:'ABC',price:8.5,img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',desc:'Ais batu campur'},
+{id:33,cat:'pencuci-mulut',name:'Puding Raja',price:10,img:'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400',desc:'Kuah kastard'},
+{id:34,cat:'pencuci-mulut',name:'Pisang Goreng Cheese',price:9,img:'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=400',desc:'Cheese melimpah'},
+{id:35,cat:'pencuci-mulut',name:'Keropok Lekor',price:5,img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',desc:'Lekor Terengganu'}
+];
+</script>
 
 <!-- ================= CATEGORY ================= -->
 <main class="container mx-auto px-4 py-12">
