@@ -1,161 +1,106 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warung Rasa Padu - Pesan Sekarang</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warung Rasa Padu - Pesan Sekarang</title>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <style>
-        body{font-family:'Poppins',sans-serif;background:#fffaf0;scroll-behavior:smooth}
-        .hero-bg{background-image:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://i.postimg.cc/rm37zbjT/image.png');background-size:cover;background-position:center}
-        .bg-pattern-makanan{background:#fff7ed;background-image:radial-gradient(#ffedd5 1px,transparent 1px);background-size:20px 20px}
-        .bg-pattern-minuman{background:#f0f9ff;background-image:radial-gradient(#e0f2fe 1px,transparent 1px);background-size:20px 20px}
-        .bg-pattern-pencuci-mulut{background:#fdf2f8;background-image:radial-gradient(#fce7f3 1px,transparent 1px);background-size:20px 20px}
-        .cart-scroll::-webkit-scrollbar,.modal-scroll::-webkit-scrollbar{width:5px}
-        .cart-scroll::-webkit-scrollbar-thumb,.modal-scroll::-webkit-scrollbar-thumb{background:#f97316;border-radius:10px}
-        .category-card:hover{transform:translateY(-5px);box-shadow:0 10px 25px -5px rgba(234,88,12,.2)}
-    </style>
+<style>
+body{font-family:'Poppins',sans-serif;background:#fffaf0}
+.hero-bg{background-image:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),url('https://i.postimg.cc/rm37zbjT/image.png');background-size:cover;background-position:center}
+.bg-pattern-makanan{background:#fff7ed}
+.bg-pattern-minuman{background:#f0f9ff}
+.bg-pattern-pencuci-mulut{background:#fdf2f8}
+</style>
 </head>
 
-<body class="text-gray-800 antialiased overflow-x-hidden">
+<body class="overflow-x-hidden">
 
-<!-- ================= NAVBAR ================= -->
-<nav class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur shadow-sm border-b">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <i class="ph-fill ph-storefront text-3xl text-orange-600"></i>
-            <span class="text-xl font-bold">Warung <span class="text-orange-600">Rasa Padu</span></span>
-        </div>
-        <button onclick="toggleCart(true)" class="relative p-2 bg-orange-100 rounded-full">
-            <i class="ph-bold ph-shopping-cart text-2xl"></i>
-            <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full hidden">0</span>
-        </button>
-    </div>
-</nav>
+<!-- KATEGORI -->
+<main class="container mx-auto p-6 grid md:grid-cols-3 gap-6">
+  <button onclick="openCategoryModal('makanan')" class="bg-white p-6 rounded-xl shadow">🍛 Makanan</button>
+  <button onclick="openCategoryModal('minuman')" class="bg-white p-6 rounded-xl shadow">🥤 Minuman</button>
+  <button onclick="openCategoryModal('pencuci-mulut')" class="bg-white p-6 rounded-xl shadow">🍨 Pencuci Mulut</button>
+</main>
 
-<!-- ================= HERO ================= -->
-<header class="hero-bg h-[50vh] flex items-center justify-center text-center text-white pt-16">
-    <div>
-        <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Makan Sedap,<br><span class="text-orange-500">Hati Senang!</span></h1>
-        <p class="text-gray-200">Pilih menu, tambah ke troli dan pesan melalui WhatsApp</p>
-    </div>
-</header>
-<script>
-
-<!-- ================= MODAL ================= -->
-<div id="menu-modal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center p-4" onclick="closeModal()">
-    <div id="modal-container" class="bg-white max-w-4xl w-full h-[85vh] rounded-3xl overflow-hidden flex flex-col" onclick="event.stopPropagation()">
-        <div id="modal-header" class="p-5 border-b flex justify-between">
-            <h2 id="modal-title" class="font-bold"></h2>
-            <button onclick="closeModal()"><i class="ph-bold ph-x"></i></button>
-        </div>
-        <div id="modal-grid" class="p-6 grid sm:grid-cols-2 gap-4 overflow-y-auto modal-scroll"></div>
-    </div>
+<!-- MODAL -->
+<div id="menu-modal" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center">
+  <div id="modal-container" class="bg-white w-full max-w-3xl h-[80vh] rounded-xl p-4 overflow-y-auto">
+    <h2 id="modal-title" class="font-bold text-xl mb-4"></h2>
+    <div id="modal-grid" class="grid gap-4"></div>
+    <button onclick="closeModal()" class="mt-4 text-red-500">Tutup</button>
+  </div>
 </div>
 
-<!-- ================= CART ================= -->
-<div id="cart-overlay" class="fixed inset-0 bg-black/60 hidden" onclick="toggleCart(false)"></div>
-<aside id="cart-sidebar" class="fixed right-0 top-0 w-full max-w-md h-full bg-white translate-x-full transition">
-    <div class="p-5 border-b flex justify-between">
-        <h3 class="font-bold">Pesanan Anda</h3>
-        <button onclick="toggleCart(false)"><i class="ph-bold ph-x"></i></button>
-    </div>
-    <div id="cart-list" class="p-5 space-y-3 cart-scroll"></div>
-    <div id="cart-footer" class="p-5 border-t hidden">
-        <input id="cust-name" placeholder="Nama anda" class="w-full border rounded p-2 mb-3">
-        <div class="flex justify-between mb-3">
-            <strong>Jumlah</strong>
-            <strong id="grand-total">RM 0.00</strong>
-        </div>
-        <button onclick="sendOrder()" class="w-full bg-green-600 text-white py-3 rounded-xl font-bold">
-            Pesan ke WhatsApp
-        </button>
-    </div>
-</aside>
-
 <script>
-/* ================= DATA ================= */
-const menuData = [ /* MENU PENUH ANDA – KEKAL SAMA */ ];
-let cart=[];
+/* ================= MENU DATA PENUH (35 ITEM) ================= */
+const menuData = [
+/* MAKANAN */
+{id:1,cat:'makanan',name:'Nasi Lemak Ayam Berempah',price:12,img:'https://i.postimg.cc/MpSkrQjS/image.png',desc:'Ayam goreng rempah rangup'},
+{id:2,cat:'makanan',name:'Nasi Goreng Kampung',price:9.5,img:'https://i.postimg.cc/fL0BN8Gs/image.png',desc:'Ikan bilis & kangkung'},
+{id:3,cat:'makanan',name:'Char Kuey Teow Special',price:10,img:'https://i.postimg.cc/cJTN3LCq/image.png',desc:'Udang & telur itik'},
+{id:4,cat:'makanan',name:'Burger Daging Cheese',price:14.5,img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',desc:'Patty tebal & cheese cair'},
+{id:5,cat:'makanan',name:'Mee Goreng Mamak',price:8,img:'https://images.unsplash.com/photo-1552611052-33e04de081de?w=400',desc:'Gorengan mamak panas'},
+{id:6,cat:'makanan',name:'Ayam Goreng Crispy (2pcs)',price:9,img:'https://i.postimg.cc/htnvfZZY/image.png',desc:'Rangup & juicy'},
+{id:7,cat:'makanan',name:'Satay Ayam (10 Cucuk)',price:15,img:'https://i.postimg.cc/jSRqswCf/image.png',desc:'Kuah kacang padu'},
+{id:8,cat:'makanan',name:'Sate Daging (10 Cucuk)',price:18,img:'https://i.postimg.cc/brLCkBHt/image.png',desc:'Daging lembu premium'},
+{id:9,cat:'makanan',name:'Nasi Kerabu Ayam Bakar',price:15,img:'https://i.postimg.cc/Cx9vGDDH/image.png',desc:'Nasi biru & ulam'},
+{id:10,cat:'makanan',name:'Laksa Utara',price:8.5,img:'https://i.postimg.cc/yd10cYfG/image.png',desc:'Kuah ikan pekat'},
+{id:11,cat:'makanan',name:'Nasi Ayam Penyet',price:13,img:'https://i.postimg.cc/sXgZ1HX7/image.png',desc:'Sambal terasi pedas'},
+{id:12,cat:'makanan',name:'Mee Bandung Muar',price:11,img:'https://i.postimg.cc/hPZgqyWg/image.png',desc:'Kuah udang pekat'},
+{id:13,cat:'makanan',name:'Soto Ayam',price:7.5,img:'https://i.postimg.cc/MGWhM18b/image.png',desc:'Sup berempah'},
+{id:14,cat:'makanan',name:'Mee Kari Kapal',price:9.5,img:'https://i.postimg.cc/QMzG2VRc/image.png',desc:'Kari santan kaw'},
+{id:15,cat:'makanan',name:'Roti John Cheese',price:10,img:'https://i.postimg.cc/N0sjsyJ3/image.png',desc:'Inti daging & sos'},
 
-/* ================= LOGIC ================= */
-function openCategoryModal(cat){
-    const modal=document.getElementById('menu-modal');
-    const grid=document.getElementById('modal-grid');
-    const title=document.getElementById('modal-title');
-    const container=document.getElementById('modal-container');
+/* MINUMAN */
+{id:21,cat:'minuman',name:'Teh Ais Padu',price:4.5,img:'https://i.postimg.cc/5977pZW7/image.png',desc:'Teh susu kaw'},
+{id:22,cat:'minuman',name:'Milo Ais Dinosaur',price:6.5,img:'https://i.postimg.cc/QtqPXtPC/image.png',desc:'Serbuk milo melimpah'},
+{id:23,cat:'minuman',name:'Sirap Bandung',price:5.5,img:'https://i.postimg.cc/C5SgN9yR/image.png',desc:'Sirap & susu'},
+{id:24,cat:'minuman',name:'Kopi O Ais',price:3.5,img:'https://i.postimg.cc/NjhxztJb/image.png',desc:'Kopi kampung'},
+{id:25,cat:'minuman',name:'Teh O Limau Ais',price:3.5,img:'https://i.postimg.cc/xjhhycmR/image.png',desc:'Segar & masam'},
+{id:26,cat:'minuman',name:'Barli Ais',price:4,img:'https://i.postimg.cc/pVh1TRSf/image.png',desc:'Barli home-made'},
+{id:27,cat:'minuman',name:'Nescafe Ais',price:4.5,img:'https://i.postimg.cc/0yBwbRFN/image.png',desc:'Berkrim'},
+{id:28,cat:'minuman',name:'Air Kelapa Muda',price:6,img:'https://i.postimg.cc/d3Ydw2X4/image.png',desc:'Kelapa segar'},
+{id:29,cat:'minuman',name:'Jus Tembikai',price:5,img:'https://i.postimg.cc/PrDWZcXZ/image.png',desc:'Buah segar'},
+{id:30,cat:'minuman',name:'Ribena Longan',price:6,img:'https://i.postimg.cc/43pxZDg4/image.png',desc:'Manis & sejuk'},
 
-    container.classList.remove('bg-pattern-makanan','bg-pattern-minuman','bg-pattern-pencuci-mulut');
-    container.classList.add(`bg-pattern-${cat}`);
+/* PENCUCI MULUT */
+{id:31,cat:'pencuci-mulut',name:'Cendol Durian',price:12,img:'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400',desc:'Durian asli'},
+{id:32,cat:'pencuci-mulut',name:'ABC',price:8.5,img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',desc:'Ais batu campur'},
+{id:33,cat:'pencuci-mulut',name:'Puding Raja',price:10,img:'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400',desc:'Kuah kastard'},
+{id:34,cat:'pencuci-mulut',name:'Pisang Goreng Cheese',price:9,img:'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=400',desc:'Cheese melimpah'},
+{id:35,cat:'pencuci-mulut',name:'Keropok Lekor',price:5,img:'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',desc:'Lekor Terengganu'}
+];
 
-    title.textContent=`Menu ${cat.replace('-',' ')}`;
+/* ================= MODAL LOGIC ================= */
+function openCategoryModal(category){
+  const modal=document.getElementById('menu-modal');
+  const grid=document.getElementById('modal-grid');
+  const title=document.getElementById('modal-title');
 
-    grid.innerHTML=menuData.filter(m=>m.cat===cat).map(i=>`
-        <div class="bg-white p-4 rounded-xl flex gap-4">
-            <img src="${i.img}" class="w-20 h-20 rounded object-cover">
-            <div>
-                <h5 class="font-bold">${i.name}</h5>
-                <p class="text-xs">${i.desc}</p>
-                <strong>RM ${i.price.toFixed(2)}</strong>
-                <button onclick="addToCart(${i.id})" class="block mt-2 bg-orange-600 text-white px-3 py-1 rounded text-xs">Tambah</button>
-            </div>
-        </div>`).join('');
+  title.textContent = 'Menu ' + category.replace('-',' ');
+  grid.innerHTML = menuData
+    .filter(m=>m.cat===category)
+    .map(m=>`
+      <div class="border p-4 rounded">
+        <img src="${m.img}" class="w-full h-40 object-cover rounded"
+             onerror="this.src='https://placehold.co/400x400?text=Tiada+Imej'">
+        <h4 class="font-bold mt-2">${m.name}</h4>
+        <p class="text-sm">${m.desc}</p>
+        <p class="font-bold">RM ${m.price.toFixed(2)}</p>
+      </div>
+    `).join('');
 
-    modal.classList.remove('hidden');
-}
-function closeModal(){document.getElementById('menu-modal').classList.add('hidden')}
-function toggleCart(s){
-    document.getElementById('cart-sidebar').classList.toggle('translate-x-full',!s);
-    document.getElementById('cart-overlay').classList.toggle('hidden',!s);
-}
-function addToCart(id){
-    const i=menuData.find(m=>m.id===id);
-    const f=cart.find(c=>c.id===id);
-    f?f.qty++:cart.push({...i,qty:1});
-    updateUI();toggleCart(true);
-}
-function updateUI(){
-    const list=document.getElementById('cart-list');
-    const footer=document.getElementById('cart-footer');
-    const total=document.getElementById('grand-total');
-    const count=document.getElementById('cart-count');
-
-    count.textContent=cart.reduce((s,i)=>s+i.qty,0);
-    count.classList.toggle('hidden',!cart.length);
-
-    if(!cart.length){list.innerHTML='<p class="text-center text-gray-400">Troli kosong</p>';footer.classList.add('hidden')}
-    else{
-        list.innerHTML=cart.map(i=>`<div class="flex justify-between"><span>${i.name} x${i.qty}</span><strong>RM ${(i.qty*i.price).toFixed(2)}</strong></div>`).join('');
-        footer.classList.remove('hidden');
-    }
-    total.textContent=`RM ${cart.reduce((s,i)=>s+i.qty*i.price,0).toFixed(2)}`;
-}
-function sendOrder(){
-    if(!cart.length)return alert("Troli kosong");
-    const name=document.getElementById('cust-name').value.trim();
-    if(!name)return alert("Masukkan nama");
-
-    fetch("https://script.google.com/macros/s/AKfycbyU2kyVCRsnwsDFBNj7so19sqcfUl8lvqmN5vG8ZMCmhtmg0jYL7vG_MdROt2JrXXs/exec",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({nama:name,items:cart})
-    }).then(()=>{
-        window.open(`https://wa.me/60168286324`,"_blank");
-        cart=[];updateUI();toggleCart(false);
-    });
+  modal.classList.remove('hidden');
 }
 
-window.openCategoryModal=openCategoryModal;
-window.sendOrder=sendOrder;
+function closeModal(){
+  document.getElementById('menu-modal').classList.add('hidden');
+}
 </script>
 
 </body>
